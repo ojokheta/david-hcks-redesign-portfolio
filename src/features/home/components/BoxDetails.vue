@@ -104,7 +104,7 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
       <div class="box-details-content">
         <div class="box-details-title">
           <AppearingText
-            text="David"
+            text="Ojokheta"
             :steps="1"
             :duration="0.35"
             @timeline:created="(tl: gsap.core.Timeline) => handleTimelineCreated(tl, 0)"
@@ -114,9 +114,9 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
           <div class="box-details-item">
             <PinIcon class="box-details-icon" />
             <AppearingText
-              v-if="t('germany')"
+              v-if="t('location-value')"
               class="box-details-content-copy"
-              :text="t('germany')"
+              :text="t('location-value')"
               :steps="3"
               :duration="0.35"
               @timeline:created="(tl: gsap.core.Timeline) => handleTimelineCreated(tl, 0.1)"
@@ -206,8 +206,7 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
     align-items: center;
     gap: var(--space-xs);
     flex-direction: row;
-    white-space: nowrap;
-    height: var(--icon-size-sm);
+    min-height: var(--icon-size-sm);
   }
 
   &-icon {

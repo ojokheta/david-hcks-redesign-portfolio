@@ -107,20 +107,16 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
 };
 
 const SERVICES_EN = [
-  { name: "Three.js & WebGL" },
-  { name: "Node.js & WebSockets" },
-  { name: "React & Vue" },
-  { name: "Kubernetes & Redis" },
-  { name: "Real-time Multiplayer" },
-] as const satisfies { name: string }[];
+  { name: "Frontend / 3D", items: "React, TypeScript, Tailwind CSS, Framer Motion, Three.js / R3F" },
+  { name: "Backend", items: "Node.js, Express, Supabase, PostgreSQL, REST & WebSockets" },
+  { name: "Trading & Tools", items: "MetaTrader 5, Trading APIs, Automation, CLI tooling" },
+] as const satisfies { name: string; items: string }[];
 
 const SERVICES_DE = [
-  { name: "Three.js & WebGL" },
-  { name: "Node.js & WebSockets" },
-  { name: "React & Vue" },
-  { name: "Kubernetes & Redis" },
-  { name: "Echtzeit-Mehrspieler" },
-] as const satisfies { name: string }[];
+  { name: "Frontend / 3D", items: "React, TypeScript, Tailwind CSS, Framer Motion, Three.js / R3F" },
+  { name: "Backend", items: "Node.js, Express, Supabase, PostgreSQL, REST & WebSockets" },
+  { name: "Trading & Tools", items: "MetaTrader 5, Trading APIs, Automatisierung, CLI-Tools" },
+] as const satisfies { name: string; items: string }[];
 
 const services = computed(() => {
   return locale.value === "en" ? SERVICES_EN : SERVICES_DE;
@@ -146,7 +142,15 @@ const services = computed(() => {
                 :text="service.name"
                 :steps="1"
                 :duration="0.35"
-                @timeline:created="(tl: gsap.core.Timeline) => handleTimelineCreated(tl, 0.15 + index * 0.1)"
+                @timeline:created="(tl: gsap.core.Timeline) => handleTimelineCreated(tl, 0.15 + index * 0.12)"
+              />
+            </p>
+            <p class="box-services-list-item-items">
+              <AppearingText
+                :text="service.items"
+                :steps="2"
+                :duration="0.4"
+                @timeline:created="(tl: gsap.core.Timeline) => handleTimelineCreated(tl, 0.22 + index * 0.12)"
               />
             </p>
           </div>
@@ -258,13 +262,29 @@ const services = computed(() => {
 
       &-name {
         font-size: var(--font-size-md);
+        font-weight: 700;
 
         @include mixins.landscape {
           font-size: var(--font-size-sm);
         }
 
         @include mixins.landscape-large {
-          font-size: var(--font-size-lg);
+          font-size: var(--font-size-md);
+        }
+      }
+
+      &-items {
+        font-size: var(--font-size-sm);
+        color: var(--color-text-cyan-300);
+        line-height: 1.35;
+        padding-top: 2px;
+
+        @include mixins.landscape {
+          font-size: var(--font-size-xs);
+        }
+
+        @include mixins.landscape-large {
+          font-size: var(--font-size-sm);
         }
       }
     }

@@ -1,5 +1,5 @@
 import { resources } from "../../../utils/resources";
-import { Mesh, Vector3, Euler, Group, ShaderMaterial, LinearSRGBColorSpace } from "three";
+import { Mesh, Vector3, Euler, Group, ShaderMaterial, LinearSRGBColorSpace, SphereGeometry } from "three";
 import { scene } from "../../core/scene";
 import { animations } from "./animations";
 import { sceneWeights, sceneWeightsInOut } from "../../../animations/scenes";
@@ -12,9 +12,13 @@ import headVertexShader from "../../shaders/avatar-head/vertex.glsl";
 import headFragmentShader from "../../shaders/avatar-head/fragment.glsl";
 import gsap from "gsap";
 import { aboutProgress } from "../../../animations/transitions/about";
+import { applyAvatarLook } from "../../utils/avatar-look";
 //import { avatarHologram } from "./hologram";
 
 import type { Material, Bone, Texture } from "three";
+
+let skinMatcap: Texture | null = null;
+let headMap: Texture | null = null;
 
 let mesh: Mesh | null = null;
 let rightHandBone: Bone | null = null;
@@ -39,7 +43,7 @@ const init = () => {
 const getMaterial = (name: string): Material | null => {
   if (name === "face") return face.getMaterial();
   if (name === "head") {
-    const texture = resources.items["head-texture"];
+    const texture = headMap ?? resources.items["head-texture"];
     texture.flipY = false;
     texture.colorSpace = LinearSRGBColorSpace;
     texture.generateMipmaps = false;
@@ -77,7 +81,7 @@ const assignMatcap = (child: Mesh): boolean => {
   } else if (child.name === "gray") {
     tex = resources.items["matcap-gray"];
   } else if (child.name === "skin") {
-    tex = resources.items["matcap-skin"];
+    tex = skinMatcap ?? resources.items["matcap-skin"];
   } else if (child.name === "white") {
     tex = resources.items["matcap-white"];
   }
@@ -95,6 +99,21 @@ const setupMesh = () => {
   if (mesh) return;
   const resource = resources.items["avatar-model"];
   mesh = cloneSkeleton(resource.scene.children[0]) as Mesh;
+
+  const headMesh = mesh.getObjectByName("head") as Mesh | undefined;
+  if (headMesh) {
+    const look = applyAvatarLook(
+      {
+        skin: resources.items["matcap-skin"],
+        head: resources.items["head-texture"],
+      },
+      headMesh,
+    );
+    skinMatcap = look.skin;
+    headMap = look.head;
+    resources.items["matcap-skin"] = skinMatcap;
+    resources.items["head-texture"] = headMap;
+  }
 
   mesh.frustumCulled = false;
 
@@ -120,6 +139,8 @@ const setupMesh = () => {
     mesh.remove(brain);
   }
 
+  attachTaperFade(mesh);
+
   mesh.rotation.z = 0;
 
   transform.add(mesh);
@@ -127,6 +148,27 @@ const setupMesh = () => {
   rightHandBone = mesh.getObjectByName("bone-right-hand") as Bone;
 
   scene.instance.add(transform);
+};
+
+const attachTaperFade = (root: Mesh) => {
+  const headBone = root.getObjectByName("headBone") as Bone | null;
+  if (!headBone) return;
+
+  const hairMat = getMaterial("black");
+  if (!hairMat) return;
+
+  const cap = new Mesh(new SphereGeometry(0.36, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.62), hairMat);
+  cap.name = "taper-fade";
+  cap.scale.set(1.08, 0.72, 1.04);
+  cap.position.set(0, 0.82, 0.16);
+  cap.frustumCulled = false;
+  cap.renderOrder = 24;
+  cap.userData.matcap = resources.items["matcap-black"];
+  cap.onBeforeRender = () => {
+    (cap.material as ShaderMaterial).uniforms.uMatcap.value = cap.userData.matcap;
+  };
+
+  headBone.add(cap);
 };
 
 const tick = () => {

@@ -8,7 +8,7 @@ import { shadow } from "./shadow";
 import { desktops } from "./desktops";
 import { mouse } from "./mouse";
 import { messagePopup } from "./message-popup";
-import { penguin } from "./penguin";
+import { kitten } from "./kitten";
 import { music } from "./music";
 
 import type { Object3D } from "three";
@@ -23,9 +23,6 @@ let objects: {
   frame: Mesh;
   mouse: Mesh;
   music: Mesh;
-  penguin: Mesh;
-  "penguin-wing-left": Mesh;
-  "penguin-wing-right": Mesh;
   plant: Mesh;
   room: Mesh;
   shelf: Mesh;
@@ -38,8 +35,11 @@ const init = () => {
   desktops.init();
   messagePopup.init();
   if (objects?.mouse) mouse.init(objects.mouse);
-  if (objects?.penguin)
-    penguin.init(objects.penguin, { left: objects["penguin-wing-left"], right: objects["penguin-wing-right"] });
+
+  const penguin = resources.items["room-model"].scene.children.find((child: Object3D) => child.name === "penguin") as
+    | Mesh
+    | undefined;
+  if (penguin) kitten.init(penguin.position, penguin.quaternion);
 
   if (objects?.music) music.init(objects.music);
 };
@@ -48,7 +48,6 @@ const initObjects = () => {
   if (objects) return;
   const resource = resources.items["room-model"];
 
-  const penguin = resource.scene.children.find((child: Object3D) => child.name === "penguin");
   objects = {
     blackboard: resource.scene.children.find((child: Object3D) => child.name === "blackboard"),
     carpet: resource.scene.children.find((child: Object3D) => child.name === "carpet"),
@@ -59,9 +58,6 @@ const initObjects = () => {
     plant: resource.scene.children.find((child: Object3D) => child.name === "plant"),
     room: resource.scene.children.find((child: Object3D) => child.name === "room"),
     shelf: resource.scene.children.find((child: Object3D) => child.name === "shelf"),
-    penguin,
-    "penguin-wing-left": penguin.children.find((child: Object3D) => child.name === "penguin-wing-left"),
-    "penguin-wing-right": penguin.children.find((child: Object3D) => child.name === "penguin-wing-right"),
   };
 
   Object.values(objects).forEach((object) => {
@@ -92,7 +88,7 @@ const tick = () => {
     objects.chair.rotation.copy(chairScrollRotation);
   }
 
-  penguin.tick();
+  kitten.tick();
   music.tick();
 };
 
@@ -103,7 +99,7 @@ const destroy = () => {
   //objects = null;
   desktops.destroy();
   mouse.destroy();
-  penguin.destroy();
+  kitten.destroy();
   music.destroy();
 };
 

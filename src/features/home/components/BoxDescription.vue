@@ -99,10 +99,10 @@ const handleTimelineCreated = (timeline: gsap.core.Timeline, delay: number) => {
     <div ref="wrapperRef" class="box-description">
       <div class="box-description-content">
         <div class="box-description-details">
-          <p class="box-description-details-name">David</p>
+          <p class="box-description-details-name">Ojokheta</p>
           <div class="box-description-details-location">
             <PinIcon class="box-description-details-location-icon" />
-            <p class="box-description-details-location-copy">{{ t("germany") }}</p>
+            <p class="box-description-details-location-copy">{{ t("location-value") }}</p>
           </div>
         </div>
         <div class="box-description-line"></div>
