@@ -1,4 +1,4 @@
-import { CanvasTexture, LinearSRGBColorSpace, Mesh, Vector3 } from "three";
+import { CanvasTexture, Mesh, Vector3 } from "three";
 
 import type { Texture } from "three";
 
