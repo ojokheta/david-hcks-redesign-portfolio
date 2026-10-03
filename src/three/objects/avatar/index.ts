@@ -165,7 +165,10 @@ const attachTaperFade = (root: Mesh) => {
   cap.renderOrder = 24;
   cap.userData.matcap = resources.items["matcap-black"];
   cap.onBeforeRender = () => {
-  (cap.material as ShaderMaterial).uniforms?.uMatcap.value = cap.userData.matcap;
+    const matcapUniform = (cap.material as ShaderMaterial).uniforms.uMatcap;
+    if (matcapUniform) {
+      matcapUniform.value = cap.userData.matcap;
+    }
   };
 
   headBone.add(cap);
