@@ -143,7 +143,7 @@ onMounted(() => {
     left: 3px;
     height: calc(100% - 6px);
     width: 128px;
-    background: var(--color-orange-400);
+    background: var(--color-grayscale-500);
     border-radius: 100px;
     transition:
       transform 0.3s var(--ease-smooth),

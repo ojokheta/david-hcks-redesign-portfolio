@@ -98,7 +98,7 @@ const getInTouchClassNames = computed(() => {
     <div class="header-right">
       <Button
         renderAs="a"
-        variant="accent"
+        variant="theme"
         :aria-label="t('get-in-touch')"
         :href="social.find((item) => item.name === 'mail')?.url ?? ''"
         external

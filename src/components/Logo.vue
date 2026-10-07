@@ -1,11 +1,10 @@
 <template>
-  <svg class="logo-svg" viewBox="0 0 56 61" xmlns="http://www.w3.org/2000/svg" height="60" width="56">
-    <use href="#logo-path" />
-  </svg>
+  <img src="/character.png" alt="Logo" class="logo-img" />
 </template>
 
 <style scoped lang="scss">
-.logo-svg {
-  fill: var(--icon-color);
+.logo-img {
+  height: 60px;
+  width: auto;
 }
 </style>
