@@ -76,12 +76,12 @@ const showAttribution = import.meta.env.VITE_SHOW_ATTRIBUTION !== "false";
           </p>
           <Clickable renderAs="div">
             <Link
-              href="https://david-hckh.com"
+              href="https://ojokayclay.freebuff.app"
               class="footer-link children-unclickable"
               external
               data-cursor="circle-white"
               data-hoversound="hover"
-              >David Heckhoff</Link
+              >Ojokay.Dev</Link
             >
           </Clickable>
         </div>
